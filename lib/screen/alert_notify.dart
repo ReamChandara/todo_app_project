@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/theme/theme.dart';
 import 'package:todo_app/widget/custom_textfield.dart';
 
 class AlertNotify extends StatefulWidget {
@@ -21,6 +20,8 @@ class _AlertNotifyState extends State<AlertNotify> {
     "Years",
   ];
   late String selectedValue = dateList.first;
+  TextEditingController beforDateCon = TextEditingController(text: "");
+  TextEditingController afterDateCon = TextEditingController(text: "");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +61,10 @@ class _AlertNotifyState extends State<AlertNotify> {
       children: [
         Row(
           children: [
-            const Expanded(child: CustomTextField()),
+            Expanded(
+                child: CustomTextField(
+              controller: beforDateCon,
+            )),
             Expanded(
                 child: Container(
               margin: const EdgeInsets.only(top: 29, right: 5),
@@ -109,7 +113,10 @@ class _AlertNotifyState extends State<AlertNotify> {
         ),
         Row(
           children: [
-            const Expanded(child: CustomTextField()),
+            Expanded(
+                child: CustomTextField(
+              controller: afterDateCon,
+            )),
             Expanded(
                 child: Container(
               margin: const EdgeInsets.only(top: 29, right: 5),

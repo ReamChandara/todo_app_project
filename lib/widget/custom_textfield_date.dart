@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+
 import '../theme/theme.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextFieldDate extends StatelessWidget {
   final String? title;
-  final Icon? icon;
-  final String? hint;
+  final Icon icon;
+  final Function() onTap;
   final TextEditingController controller;
-  const CustomTextField({
+  const CustomTextFieldDate({
     Key? key,
     this.title = "Title",
-    this.icon,
-    this.hint = "Enter title here",
+    required this.icon,
+    required this.onTap,
     required this.controller,
   }) : super(key: key);
 
@@ -32,16 +33,17 @@ class CustomTextField extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10, top: 2),
               alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
-                  //  color: Get.isDarkMode ? Colors.blueGrey[400] : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey)),
               width: double.infinity,
               height: 50,
               child: TextFormField(
+                readOnly: true,
+                onTap: onTap,
                 controller: controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: hint!,
+                  suffixIcon: icon,
                 ),
               ))
         ],

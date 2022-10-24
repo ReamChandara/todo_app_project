@@ -1,16 +1,18 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_app/controller/task_controller.dart';
+import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/screen/add_task_screen.dart';
 import 'package:todo_app/screen/second_screen.dart';
-import 'package:todo_app/screen/setting_screen.dart';
 import 'package:todo_app/service/notification_service.dart';
 import 'package:todo_app/service/theme_service.dart';
 import 'package:todo_app/theme/theme.dart';
 import 'package:todo_app/widget/custom_buttom.dart';
+import 'package:todo_app/widget/task_tilte.dart';
 
 import '../widget/custom_drawer.dart';
 
@@ -26,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late ThemeMode themeMode;
   DateTime _selectedValue = DateTime.now();
   bool isdark = true;
+  var taskController = Get.put(TaskController());
+
   void backgroundCallback() async {
     await Future.delayed(const Duration(seconds: 10)).whenComplete(
       () => service.showNotification(id: 1, title: "hello", body: "Alert task"),
@@ -60,23 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  get _buildDrawer {
-    return Drawer(
-      child: Column(
-        children: [
-          const DrawerHeader(child: Text("Hello")),
-          ListTile(
-            onTap: () {
-              Get.to(const SettingScreen());
-            },
-            leading: const Icon(Icons.settings),
-            title: const Text("Setting"),
-          )
-        ],
-      ),
-    );
-  }
-
   get _buildFloatingButton {
     return FloatingActionButton(
       backgroundColor: Theme.of(context).primaryColor,
@@ -96,25 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   get _buildappbar {
     return AppBar(
-      // leading: IconButton(
-      //     onPressed: (() async {
-      //       // await service.showNotification(
-      //       //     id: 0, title: "ChangeTheme", body: "Theme has been changed!");
-      //       // await service.showSchedleNotification(
-      //       //     id: 0,
-      //       //     title: "change theme",
-      //       //     body: "theme chnaged has deley",
-      //       //     second: 4);
-      //       // await service.showNotificationWithPayload(
-      //       //     id: 0,
-      //       //     title: 'ChangeTheme',
-      //       //     body: "Theme has been change",
-      //       //     payload: "Second Screen");
-      //     }),
-      //     icon: Icon(
-      //       isdark ? Icons.nightlight_round_outlined : Icons.light_mode,
-      //       size: 20,
-      //     )),
       backgroundColor: Theme.of(context).primaryColor,
       actions: [
         Container(
@@ -138,11 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   get _buildBody {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -162,11 +130,166 @@ class _HomeScreenState extends State<HomeScreen> {
                   })
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildTimeLinePicker()
-        ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: _buildTimeLinePicker(),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Expanded(child: GetX<TaskController>(
+          builder: ((controller) {
+            if (taskController.isLoading.value) {
+              return const CircularProgressIndicator();
+            } else {
+              return ListView.builder(
+                  itemCount: taskController.taskModels.length,
+                  itemBuilder: (context, index) {
+                    TaskModel taskModel = taskController.taskModels[index];
+                    if (taskModel.repead == "Daily") {
+                      return AnimationConfiguration.staggeredList(
+                          delay: const Duration(milliseconds: 500),
+                          position: index,
+                          child: SlideAnimation(
+                            child: FadeInAnimation(
+                                child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: (() {
+                                    _buildBottomSheet(context, taskModel);
+                                  }),
+                                  child: TaskTile(
+                                    task: taskModel,
+                                  ),
+                                )
+                              ],
+                            )),
+                          ));
+                    }
+                    if (taskModel.date ==
+                        DateFormat.yMd().format(_selectedValue)) {
+                      return AnimationConfiguration.staggeredList(
+                          delay: const Duration(milliseconds: 500),
+                          position: index,
+                          child: SlideAnimation(
+                            child: FadeInAnimation(
+                                child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: (() {
+                                    _buildBottomSheet(context, taskModel);
+                                  }),
+                                  child: TaskTile(
+                                    task: taskModel,
+                                  ),
+                                )
+                              ],
+                            )),
+                          ));
+                    } else {
+                      return const SizedBox();
+                    }
+                  });
+            }
+          }),
+        ))
+      ],
+    );
+  }
+
+  _buildBottomSheet(BuildContext context, TaskModel taskModel) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.only(top: 0.4),
+        height: taskModel.isComplate == 1
+            ? MediaQuery.of(context).size.height * 0.24
+            : MediaQuery.of(context).size.height * 0.38,
+        color: Get.isDarkMode ? Colors.black : Colors.white,
+        child: Column(
+          children: [
+            Container(
+              height: 6,
+              width: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: bluishClr,
+              ),
+            ),
+            const Spacer(),
+            taskModel.isComplate == 1
+                ? const SizedBox()
+                : _bottomSheetButton(
+                    label: "Complate Task",
+                    onTap: () {
+                      taskController.makeTakeComplate(taskModel.id);
+                      taskController.showTask();
+                      Get.back();
+                    },
+                    clr: bluishClr,
+                    context: context),
+            const SizedBox(
+              height: 5,
+            ),
+            _bottomSheetButton(
+                label: "Delete Task",
+                onTap: () {
+                  taskController.deleteTask(taskModel.id);
+                  taskController.showTask();
+                  Get.back();
+                },
+                clr: Colors.red[300]!,
+                context: context),
+            const SizedBox(
+              height: 20,
+            ),
+            _bottomSheetButton(
+                label: "Close",
+                onTap: () {
+                  Get.back();
+                },
+                clr: Colors.red[300]!,
+                context: context,
+                isClose: true),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _bottomSheetButton(
+      {required String label,
+      required Function() onTap,
+      required Color clr,
+      required BuildContext context,
+      bool isClose = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 55,
+        width: MediaQuery.of(context).size.width * 0.9,
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: 2,
+                color: isClose == true
+                    ? Get.isDarkMode
+                        ? Colors.grey[600]!
+                        : Colors.grey[300]!
+                    : clr),
+            color: isClose == true ? Colors.transparent : clr,
+            borderRadius: BorderRadius.circular(20)),
+        child: Text(
+          label,
+          style: miniTextStyte(fontSize: 16),
+        ),
       ),
     );
   }
@@ -199,3 +322,86 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+
+// AnimationLimiter(
+//                 child: Column(
+//                   children: AnimationConfiguration.toStaggeredList(
+//                       duration: const Duration(milliseconds: 375),
+//                       childAnimationBuilder: (widget) => SlideAnimation(
+//                             horizontalOffset:
+//                                 MediaQuery.of(context).size.width / 2,
+//                             child: FadeInAnimation(child: widget),
+//                           ),
+//                       children: taskController.taskModels.map((e) {
+//                         if (e.repead == "Dialy") {
+//                           return GestureDetector(
+//                             onTap: (() {
+//                               _buildBottomSheet(context, e);
+//                             }),
+//                             child: TaskTile(
+//                               task: e,
+//                             ),
+//                           );
+//                         } else if (e.date ==
+//                             DateFormat.yMd().format(_selectedValue)) {
+//                           return GestureDetector(
+//                             onTap: (() {
+//                               _buildBottomSheet(context, e);
+//                             }),
+//                             child: TaskTile(
+//                               task: e,
+//                             ),
+//                           );
+//                         } else {
+//                           return const SizedBox();
+//                         }
+//                       }).toList()),
+//                 ),
+//               );
+
+// return ListView.builder(
+//                   itemCount: taskController.taskModels.length,
+//                   itemBuilder: (context, index) {
+//                     TaskModel taskModel = taskController.taskModels[index];
+//                     if (taskModel.repead == "Daily") {
+//                       return AnimationConfiguration.staggeredList(
+//                           position: index,
+//                           child: SlideAnimation(
+//                             child: FadeInAnimation(
+//                                 child: Row(
+//                               children: [
+//                                 GestureDetector(
+//                                   onTap: (() {
+//                                     _buildBottomSheet(context, taskModel);
+//                                   }),
+//                                   child: TaskTile(
+//                                     task: taskModel,
+//                                   ),
+//                                 )
+//                               ],
+//                             )),
+//                           ));
+//                     }
+//                     if (taskModel.date ==
+//                         DateFormat.yMd().format(_selectedValue)) {
+//                       return AnimationConfiguration.staggeredList(
+//                           position: index,
+//                           child: SlideAnimation(
+//                             child: FadeInAnimation(
+//                                 child: Row(
+//                               children: [
+//                                 GestureDetector(
+//                                   onTap: (() {
+//                                     _buildBottomSheet(context, taskModel);
+//                                   }),
+//                                   child: TaskTile(
+//                                     task: taskModel,
+//                                   ),
+//                                 )
+//                               ],
+//                             )),
+//                           ));
+//                     } else {
+//                       return const SizedBox();
+//                     }
+//                   });
