@@ -160,6 +160,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: (() {
+                                    // service.schedleNotification(
+                                    //   1,
+                                    //   int.parse(
+                                    //       myTime.toString().split(':')[0]),
+                                    //   int.parse(
+                                    //       myTime.toString().split(':')[1]),
+                                    //   taskModel,
+                                    //   "Hello",
+                                    // );
                                     _buildBottomSheet(context, taskModel);
                                   }),
                                   child: TaskTile(
