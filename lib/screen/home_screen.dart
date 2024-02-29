@@ -2,13 +2,11 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/controller/task_controller.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/screen/add_task_screen.dart';
 import 'package:todo_app/screen/second_screen.dart';
-import 'package:todo_app/service/notification_service.dart';
 import 'package:todo_app/service/theme_service.dart';
 import 'package:todo_app/theme/theme.dart';
 import 'package:todo_app/widget/custom_buttom.dart';
@@ -24,33 +22,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late NotifyHelper service;
   late ThemeMode themeMode;
   DateTime _selectedValue = DateTime.now();
   bool isdark = true;
   var taskController = Get.put(TaskController());
 
-  void backgroundCallback() async {
-    await Future.delayed(const Duration(seconds: 10)).whenComplete(
-      () => service.showNotification(id: 1, title: "hello", body: "Alert task"),
-    );
-  }
+  // void backgroundCallback() async {
+  //   await Future.delayed(const Duration(seconds: 10)).whenComplete(
+  //     () => service.showNotification(id: 1, title: "hello", body: "Alert task"),
+  //   );
+  // }
 
   @override
   void initState() {
-    service = NotifyHelper();
-    service.intialize();
-    listenToNotification();
-    themeMode = ThemeService().theme;
-    if (themeMode == ThemeMode.dark) {
-      setState(() {
-        isdark = true;
-      });
-    } else {
-      setState(() {
-        isdark = false;
-      });
-    }
+    // service = NotifyHelper();
+    // service.intialize();
+    // listenToNotification();
+    // themeMode = ThemeService().theme;
+    // if (themeMode == ThemeMode.dark) {
+    //   setState(() {
+    //     isdark = true;
+    //   });
+    // } else {
+    //   setState(() {
+    //     isdark = false;
+    //   });
+    // }
     super.initState();
   }
 
@@ -322,8 +319,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void listenToNotification() =>
-      service.onNotificationClick.stream.listen(onNoticationListener);
+  // void listenToNotification() =>
+  //     service.onNotificationClick.stream.listen(onNoticationListener);
 
   void onNoticationListener(String? payload) {
     if (payload != null && payload.isNotEmpty) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:todo_app/service/theme_service.dart';
 
 Color bluishClr = const Color(0XFF4E5A8E);
 Color yellowClr = const Color(0XFFFFB746);
@@ -12,7 +10,6 @@ Color? darkHeaderClr = Colors.blueGrey[800];
 
 class Themes {
   static final light = ThemeData(
-    backgroundColor: Colors.amber,
     primaryColor: primaryClr,
     brightness: Brightness.light,
   );
@@ -23,33 +20,29 @@ class Themes {
 }
 
 TextStyle get subHeadingStyte {
-  return GoogleFonts.lato(
-      textStyle: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Get.isDarkMode ? Colors.grey[400] : Colors.grey));
+  return TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: Get.isDarkMode ? Colors.grey[400] : Colors.grey);
 }
 
 TextStyle get headingStyte {
-  return GoogleFonts.lato(
-      textStyle: TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Get.isDarkMode ? Colors.white : Colors.black));
+  return TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      color: Get.isDarkMode ? Colors.white : Colors.black);
 }
 
 TextStyle miniTextStyte({double fontSize = 16}) {
-  return GoogleFonts.lato(
-      textStyle: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Get.isDarkMode ? Colors.white : Colors.black));
+  return TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+      color: Get.isDarkMode ? Colors.white : Colors.black);
 }
 
 TextStyle get dateTimeTextStyte {
-  return GoogleFonts.lato(
-      textStyle: TextStyle(
+  return TextStyle(
     fontWeight: FontWeight.bold,
     color: Get.isDarkMode ? Colors.white : Colors.grey[600],
-  ));
+  );
 }

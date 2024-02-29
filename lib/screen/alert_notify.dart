@@ -100,9 +100,6 @@ class _AlertNotifyState extends State<AlertNotify> {
                       selectedValue = value as String;
                     });
                   },
-                  buttonHeight: 40,
-                  buttonWidth: 140,
-                  itemHeight: 40,
                 ),
               ),
             ))
@@ -152,9 +149,6 @@ class _AlertNotifyState extends State<AlertNotify> {
                       selectedValue = value as String;
                     });
                   },
-                  buttonHeight: 40,
-                  buttonWidth: 140,
-                  itemHeight: 40,
                 ),
               ),
             ))

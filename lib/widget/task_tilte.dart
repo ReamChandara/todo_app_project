@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../models/task_model.dart';
 import '../theme/theme.dart';
@@ -29,12 +28,10 @@ class TaskTile extends StatelessWidget {
               children: [
                 Text(
                   task?.title ?? "",
-                  style: GoogleFonts.lato(
-                    textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(
                   height: 12,
@@ -50,19 +47,14 @@ class TaskTile extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       "${task!.startTime} - ${task!.endTime}",
-                      style: GoogleFonts.lato(
-                        textStyle:
-                            TextStyle(fontSize: 13, color: Colors.grey[100]),
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[100]),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
                   task?.note ?? "",
-                  style: GoogleFonts.lato(
-                    textStyle: TextStyle(fontSize: 15, color: Colors.grey[100]),
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.grey[100]),
                 ),
               ],
             ),
@@ -77,12 +69,10 @@ class TaskTile extends StatelessWidget {
             quarterTurns: 3,
             child: Text(
               task!.isComplate == 1 ? "COMPLETED" : "TODO",
-              style: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+              style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
         ]),

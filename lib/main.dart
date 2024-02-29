@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
-import 'package:todo_app/controller/task_controller.dart';
-import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/screen/home_screen.dart';
-import 'package:todo_app/service/notification_service.dart';
 import 'package:todo_app/service/theme_service.dart';
 import 'package:todo_app/theme/theme.dart';
 
@@ -23,47 +19,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  late NotifyHelper service = NotifyHelper();
-  var taskController = Get.put(TaskController());
-  void setNotification() async {
-    service.intialize();
-    TaskModel? taskModel = taskController.taskModels
-        .firstWhereOrNull((element) => element.repead == 'Daily');
-    if (taskModel != null) {
-      DateTime dateTime = DateFormat.jm().parse(taskModel.startTime.toString());
-      var myTime = DateFormat("HH:mm").format(dateTime);
-      service.schedleNotification(0, int.parse(myTime.toString().split(':')[0]),
-          int.parse(myTime.toString().split(':')[1]), taskModel, "hello");
-    }
-  }
+  // //late NotifyHelper service = NotifyHelper();
+  // var taskController = Get.put(TaskController());
+  // void setNotification() async {
+  //   service.intialize();
+  //   TaskModel? taskModel = taskController.taskModels
+  //       .firstWhereOrNull((element) => element.repead == 'Daily');
+  //   if (taskModel != null) {
+  //     DateTime dateTime = DateFormat.jm().parse(taskModel.startTime.toString());
+  //     var myTime = DateFormat("HH:mm").format(dateTime);
+  //     service.schedleNotification(0, int.parse(myTime.toString().split(':')[0]),
+  //         int.parse(myTime.toString().split(':')[1]), taskModel, "hello");
+  //   }
+  // }
 
-  void clearNotification() async {
-    service.intialize();
-    await service.cancelAllNotifications();
-  }
+  // void clearNotification() async {
+  //   service.intialize();
+  //   await service.cancelAllNotifications();
+  // }
 
   @override
   void initState() {
     super.initState();
-    clearNotification();
-    WidgetsBinding.instance!.addObserver(this);
+
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) {}
-    final isbackground = state == AppLifecycleState.paused;
-    if (isbackground) {
-      setNotification();
-    } else {}
-    super.didChangeAppLifecycleState(state);
   }
 
   @override

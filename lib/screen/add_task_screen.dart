@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/controller/task_controller.dart';
 import 'package:todo_app/models/task_model.dart';
-import 'package:todo_app/screen/home_screen.dart';
 import 'package:todo_app/theme/theme.dart';
 import 'package:todo_app/widget/custom_buttom.dart';
 import 'package:todo_app/widget/custom_dropdow.dart';
