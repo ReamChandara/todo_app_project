@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:todo_app/screen/alert_notify.dart';
 import 'package:todo_app/theme/theme.dart';
 
+import 'test_notification_screen.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
 
@@ -40,6 +42,30 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     Text(
                       "Alert Notification",
+                      style: miniTextStyte(fontSize: 20),
+                    ),
+                  ],
+                )),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.to(const TestNotificationScreen());
+          },
+          child: Card(
+            child: Container(
+                padding: const EdgeInsets.only(left: 10),
+                alignment: Alignment.centerLeft,
+                height: 60,
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    const Icon(Icons.alarm),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Click Notification",
                       style: miniTextStyte(fontSize: 20),
                     ),
                   ],

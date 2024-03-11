@@ -5,9 +5,12 @@ import 'package:todo_app/screen/home_screen.dart';
 import 'package:todo_app/service/theme_service.dart';
 import 'package:todo_app/theme/theme.dart';
 
+import 'service/notification_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await LocalNotificationService().initNotify();
   runApp(const MyApp());
 }
 

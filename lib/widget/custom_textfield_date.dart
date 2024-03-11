@@ -42,6 +42,7 @@ class CustomTextFieldDate extends StatelessWidget {
                 onTap: onTap,
                 controller: controller,
                 decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(bottom: 4, top: 6),
                   border: InputBorder.none,
                   suffixIcon: icon,
                 ),

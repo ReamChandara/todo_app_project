@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../theme/theme.dart';
 
@@ -30,6 +31,7 @@ class CustomDropdown extends StatelessWidget {
             style: miniTextStyte(fontSize: 16),
           ),
           Container(
+            width: Get.width,
             margin: const EdgeInsets.only(top: 10, right: 5),
             padding: const EdgeInsets.only(left: 10, right: 5),
             height: 50,

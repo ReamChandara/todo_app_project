@@ -3,13 +3,13 @@
 import 'dart:async';
 
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 class DBConnection {
   setDatabase() async {
     var directory = await getApplicationDocumentsDirectory();
-    var path = join(directory.path, "db_task");
+    var path = p.join(directory.path, "db_task");
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
